@@ -1,0 +1,32 @@
+.sample-box-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 200px;
+    background-color: lightgray;
+    border-radius: 10px;
+    margin: 2px;
+}
+
+.sample-box-middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 200px;
+    background-color: lightgray;
+    border-radius: 10px;
+    margin: 2px;
+}
+
+.sample-box-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 200px;
+    background-color: lightgray;
+    border-radius: 10px;
+    margin: 2px;
+}

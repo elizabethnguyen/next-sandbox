@@ -116,6 +116,11 @@ interface SampleInterface {
 }
 ```
 
+
+## Interfaces vs Type Aliases
+Type aliases and interfaces are very similar, and in many cases you can choose between them freely. Almost all features of an interface are available in type, the key distinction is that a type cannot be re-opened to add new properties vs an interface which is always extendable.
+
+
 ## Inheritance
 ```
 interface BaseEvent {
@@ -134,12 +139,44 @@ interface RecurringEvent extends BaseEvent {
 }
 ```
 
-Unions
+## Unions
+When you're unsure of a type that you will be handling in a function (but they are subsets of some sort), allow both options and then use type discrimination to handle them each appropriately.
 ```
 type CalendarEvent = OneOffEvent | RecurringEvent;
 ```
 
-## Interesting Ways to Type
+
+## Type Discrimination
+```
+function renderEvent(event: CalendarEvent) {
+    if (event.eventType === 'one_off') {
+        const date = event.date;
+    } else {
+        // well it has to be a RecurringEvent
+        const recurrence = event.recurrence;
+    }
+}
+```
+
+
+## Intersections
+Combine types to make a type that takes attributes from its parts.
+```
+type Animal = {
+  name: string;
+}
+
+type Bear = Animal & { 
+  honey: boolean;
+}
+
+const bear = getBear();
+bear.name;
+bear.honey;
+```
+
+
+## Other Interesting Ways to Type
 ```
 type Colors = "red" | "green" | "blue";
 type RGB = [red: number, green: number, blue: number];
@@ -155,18 +192,6 @@ const palette = {
 * Any lets Typescript go 'hands-off' and will not enact any type safeguards
 * Unknown tells Typescript that we're unsure what value goes there but you can't perform any operations on this data unless you can introduce type guards / type predicates to demonstrate that this value is indeed of this type.
 
-
-## Type Discrimination
-```
-function renderEvent(event: CalendarEvent) {
-    if (event.eventType === 'one_off') {
-        const date = event.date;
-    } else {
-        // well it has to be a RecurringEvent
-        const recurrence = event.recurrence;
-    }
-}
-```
 
 
 ## Utility Types
@@ -214,6 +239,7 @@ function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
 }
 ```
 
+
 ### Other Notable Utility Types
 * `Required` - opposite of `Partial`
 * `ReadOnly` - immutable objects
@@ -222,7 +248,7 @@ function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
 
 Remember that the `...` spread operator unwraps the objects and subsequent arguments following the first are upserts applied to the previous argument.
 
-i.e. `...fieldsToUpdate` will be replacing and inserting any missing fields in `...todo` (there are of course no missing fields because this is a `Partial`)
+i.e. `...fieldsToUpdate` will be replacing and inserting any missing fields in `...todo` (there are of course no missing fields because this is a `Partial` of a Todo)
 
 Also remember that `return {...todo, fieldsToUpdaate};` is returning a new copy of the updated data, otherwise you would be at risk of mutating an already existing object `todo` since Javascript is **pass-by-reference**.
 
@@ -292,6 +318,9 @@ function getArea(shape: Shape) {
       return shape.sideLength ** 2;
     default:
       const _exhaustiveCheck: never = shape;
+  }
+}
 
 Type 'Triangle' is not assignable to type 'never'.
+
 ```

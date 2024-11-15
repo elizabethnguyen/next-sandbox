@@ -259,7 +259,7 @@ Confirms a type matches a specific interface without changing the type of the th
 Even more strictly type something beyond a generic type; you can constrain your expected subset of values to explicit 'types'.
 
 ```
-const exampleOne = "example // the type is "example" and it's a subset of string
+const exampleOne = "example" // the type is "example" and it's a subset of string
 const exampleTwo: string = "example" // the type is explicitly string
 const exampleThree = "example" satisfies string // the type is "example" but satisfies string
 const exampleFour = "example" satisfies number // this does not work

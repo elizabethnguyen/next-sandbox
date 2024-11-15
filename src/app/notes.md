@@ -78,6 +78,14 @@ Example: analytics tracking is a secondary behavior when a page loads, so we can
 
 Other examples may include fetching data on load, onComponentMount, etc.
 
+```
+useEffect(() => {
+    if (!isClient) {
+        setIsClient(true);
+    }
+}, [isClient]);
+```
+
 
 ### useMemo
 For values.
@@ -87,6 +95,53 @@ Memoing too much also loses readability - i.e. it can be hard to know what the i
 
 ### memo()
 For components. Prevents rerendering a component when it's parent component rerenders.
+
+## Context Stores / useContext
+Instead of prop drilling, consider using contexts as a way to avoid passing down props through multiple child components.
+```
+export const MapContext = createContext({} as MapStore);
+[...]
+
+    const contextValue = React.useMemo(() => {
+        return {
+            ...
+        }
+    }, [...])
+
+    return (
+        <MapContext.Provider
+            value={{
+                mapMetadata,
+                selectedPlace,
+                setSelectedPlace,
+                categoryMap,
+                catToPlacesMap,
+                openMarker,
+                mapTitle,
+                setOpenMarker,
+                focusOnLatLng,
+                recenterMap,
+                updateMapMetadata,
+                updateCatToPlacesMap,
+                deletePlaceFromCatToPlacesMap,
+                deselectSelectedPlace,
+                updateCategoryMap,
+                deleteCategoryAndPlacesFromMap,
+            }}
+        >
+            [...]
+        </MapContext.Provider>
+
+        [...]
+        const store = useContext(MapContext);
+        const center: google.maps.LatLngLiteral = {
+            lat: store.mapMetadata.lat,
+            lng: store.mapMetadata.lng,
+        };
+```
+
+Note that this is actually the wrong way to do the provider because you'll recreate this every time (put it in the memo above instead).
+
 
 
 # Typescript Things
